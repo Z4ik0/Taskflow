@@ -107,3 +107,8 @@ ul li button {
 ul li button:hover {
   background-color: darkred;
 }
+
+.notify-btn{
+  color: white;
+  background-color: #0004ff;
+}

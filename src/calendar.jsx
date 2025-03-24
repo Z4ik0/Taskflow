@@ -22,8 +22,35 @@ function TaskCalendar() {
     localStorage.setItem("asuntos", JSON.stringify(asuntos));
   }, [asuntos]);
 
+  useEffect(() => {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }, []);
+
   const handleDateChange = (selectedDate) => {
     setDate(selectedDate);
+  };
+
+  const showNotification = (title, body) => {
+    if (Notification.permission === "granted") {
+      new Notification(title, {
+        body: body,
+        icon: "https://cdn-icons-png.flaticon.com/512/190/190411.png",
+      });
+    }
+  };
+
+  const scheduleNotification = (tarea) => {
+    const now = new Date().getTime();
+    const TiempoTarea = new Date(date).getTime();
+    const delay = TiempoTarea - now - 60000; // 1 minuto antes
+
+    if (delay > 0) {
+      setTimeout(() => {
+        showNotification("⏳ Recordatorio de tarea", `¡Recuerda! Tienes pendiente: ${tarea}`);
+      }, delay);
+    }
   };
 
   const agregarTarea = () => {
@@ -35,6 +62,8 @@ function TaskCalendar() {
           [date.toDateString()]: [...(prevTareas[date.toDateString()] || []), tareaText],
         };
         localStorage.setItem("tareas", JSON.stringify(newTareas));
+        showNotification("Nueva tarea agregada", `📌 ${tareaText}`);
+        scheduleNotification(tareaText);
         return newTareas;
       });
     }
@@ -49,6 +78,7 @@ function TaskCalendar() {
           [date.toDateString()]: [...(prevAsuntos[date.toDateString()] || []), asuntoText],
         };
         localStorage.setItem("asuntos", JSON.stringify(newAsuntos));
+        showNotification("Nuevo asunto agregado", `📄 ${asuntoText}`);
         return newAsuntos;
       });
     }
@@ -57,17 +87,17 @@ function TaskCalendar() {
   const eliminarTarea = (eliminarTareas) => {
     enviarTareas((prevTareas) => {
       const actualizarTareas = prevTareas[date.toDateString()].filter((tarea) => tarea !== eliminarTareas);
-      const newTareas = { ...prevTareas };  
+      const newTareas = { ...prevTareas };
       if (actualizarTareas.length === 0) {
         delete newTareas[date.toDateString()];
       } else {
         newTareas[date.toDateString()] = actualizarTareas;
       }
-      localStorage.setItem("tasks", JSON.stringify(newTareas));
+      localStorage.setItem("tareas", JSON.stringify(newTareas));
       return newTareas;
     });
   };
- 
+
   const eliminarAsunto = (eliminarAsuntos) => {
     enviarAsunto((prevAsuntos) => {
       const actualizarAsuntos = prevAsuntos[date.toDateString()].filter((asunto) => asunto !== eliminarAsuntos);
@@ -77,7 +107,7 @@ function TaskCalendar() {
       } else {
         newAsuntos[date.toDateString()] = actualizarAsuntos;
       }
-      localStorage.setItem("asunts", JSON.stringify(newAsuntos));
+      localStorage.setItem("asuntos", JSON.stringify(newAsuntos));
       return newAsuntos;
     });
   };
@@ -89,9 +119,8 @@ function TaskCalendar() {
   return (
     <div className="calendar-container">
       <h2>Calendario</h2>
-      
+
       <div className="calendar-and-tasks">
-        
         <div className="calendar">
           <Calendar
             onChange={handleDateChange}
@@ -101,16 +130,16 @@ function TaskCalendar() {
           />
         </div>
 
-        
         <div className="tareas">
-          <h3>Tareas para: {date.toLocaleDateString("es-ES", )}</h3>
-          
+          <h3>Tareas para: {date.toLocaleDateString("es-ES")}</h3>
+
           <div>
             {tareas[date.toDateString()]?.length ? (
               <ul>
                 {tareas[date.toDateString()].map((tarea, index) => (
                   <li key={index}>
                     {tarea}
+                    <button className="notify-btn" onClick={() => showNotification("Recordatorio", `Tarea: ${tarea}`)}>🔔 Notificar</button>
                     <button className="delete-btn" onClick={() => eliminarTarea(tarea)}>Eliminar</button>
                   </li>
                 ))}
