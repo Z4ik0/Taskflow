@@ -6,6 +6,7 @@ function TaskCalendar() {
   const [date, setDate] = useState(new Date());
   const [tareas, enviarTareas] = useState({});
   const [asuntos, enviarAsunto] = useState({});
+  const [taskToNotify, setTaskToNotify] = useState(null); // Estado para almacenar la tarea o asunto seleccionada para notificación
 
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem("tareas")) || {};
@@ -38,18 +39,34 @@ function TaskCalendar() {
         body: body,
         icon: "https://cdn-icons-png.flaticon.com/512/190/190411.png",
       });
+    } else {
+      console.log("Permiso de notificación no concedido.");
     }
   };
 
-  const scheduleNotification = (tarea) => {
-    const now = new Date().getTime();
-    const TiempoTarea = new Date(date).getTime();
-    const delay = TiempoTarea - now - 60000; // 1 minuto antes
+  // Función que se ejecuta cuando el usuario hace clic en "Notificar"
+  const handleNotifyButtonClick = () => {
+    if (taskToNotify) {
+      const now = new Date().getTime();
+      const selectedDate = new Date(date); // Asegurarse de que la fecha seleccionada se ajuste correctamente
+      selectedDate.setHours(0, 0, 0, 0); // Establecer la hora de la tarea a medianoche
 
-    if (delay > 0) {
-      setTimeout(() => {
-        showNotification("⏳ Recordatorio de tarea", `¡Recuerda! Tienes pendiente: ${tarea}`);
-      }, delay);
+      const TiempoTarea = selectedDate.getTime();
+      const delay = TiempoTarea - now - 60000; // 1 minuto antes
+
+      console.log(`Notificando: ${taskToNotify}`);
+      console.log(`Tiempo de la tarea/asunto: ${TiempoTarea}`);
+      console.log(`Delay de notificación: ${delay}`);
+
+      if (delay > 0) {
+        setTimeout(() => {
+          showNotification("⏳ Recordatorio", `¡Recuerda! Tienes pendiente: ${taskToNotify}`);
+        }, delay);
+      } else {
+        console.log("La tarea o asunto ya pasó, no se puede notificar.");
+      }
+    } else {
+      console.log("No hay tarea o asunto seleccionado para notificar.");
     }
   };
 
@@ -62,8 +79,6 @@ function TaskCalendar() {
           [date.toDateString()]: [...(prevTareas[date.toDateString()] || []), tareaText],
         };
         localStorage.setItem("tareas", JSON.stringify(newTareas));
-        showNotification("Nueva tarea agregada", `📌 ${tareaText}`);
-        scheduleNotification(tareaText);
         return newTareas;
       });
     }
@@ -78,7 +93,6 @@ function TaskCalendar() {
           [date.toDateString()]: [...(prevAsuntos[date.toDateString()] || []), asuntoText],
         };
         localStorage.setItem("asuntos", JSON.stringify(newAsuntos));
-        showNotification("Nuevo asunto agregado", `📄 ${asuntoText}`);
         return newAsuntos;
       });
     }
@@ -139,7 +153,12 @@ function TaskCalendar() {
                 {tareas[date.toDateString()].map((tarea, index) => (
                   <li key={index}>
                     {tarea}
-                    <button className="notify-btn" onClick={() => showNotification("Recordatorio", `Tarea: ${tarea}`)}>🔔 Notificar</button>
+                    <button 
+                      className="notify-btn" 
+                      onClick={() => setTaskToNotify(tarea)} // Establecer la tarea a notificar
+                    >
+                      🔔 Notificar
+                    </button>
                     <button className="delete-btn" onClick={() => eliminarTarea(tarea)}>Eliminar</button>
                   </li>
                 ))}
@@ -149,13 +168,19 @@ function TaskCalendar() {
             )}
           </div>
 
-          <h3>Asuntos:</h3>
+          <h3>Asuntos: {date.toLocaleDateString("es-ES")}</h3>
           <div>
             {asuntos[date.toDateString()]?.length ? (
               <ul>
                 {asuntos[date.toDateString()].map((asunto, index) => (
                   <li key={index}>
                     {asunto}
+                    <button 
+                      className="notify-btn" 
+                      onClick={() => setTaskToNotify(asunto)} // Establecer el asunto a notificar
+                    >
+                      🔔 Notificar
+                    </button>
                     <button className="delete-btn" onClick={() => eliminarAsunto(asunto)}>Eliminar</button>
                   </li>
                 ))}
@@ -167,6 +192,11 @@ function TaskCalendar() {
 
           <button className="add-btn" onClick={agregarTarea}>➕ Agregar Tarea</button>
           <button className="add-btn" onClick={agregarAsunto}>📄 Agregar Asunto</button>
+
+          {/* Botón para disparar la notificación */}
+          <button className="notify-btn" onClick={handleNotifyButtonClick}>
+            Enviar Notificación
+          </button>
         </div>
       </div>
     </div>
