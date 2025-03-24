@@ -4,86 +4,86 @@ import "./calendar.css";
 
 function TaskCalendar() {
   const [date, setDate] = useState(new Date());
-  const [tasks, setTasks] = useState({});
-  const [asunts, setAsunts] = useState({});
+  const [tareas, enviarTareas] = useState({});
+  const [asuntos, enviarAsunto] = useState({});
 
   useEffect(() => {
-    const storedTasks = JSON.parse(localStorage.getItem("tasks")) || {};
-    const storedAsunts = JSON.parse(localStorage.getItem("asunts")) || {};
-    setTasks(storedTasks);
-    setAsunts(storedAsunts);
+    const storedTasks = JSON.parse(localStorage.getItem("tareas")) || {};
+    const storedAsunts = JSON.parse(localStorage.getItem("asuntos")) || {};
+    enviarTareas(storedTasks);
+    enviarAsunto(storedAsunts);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+    localStorage.setItem("tareas", JSON.stringify(tareas));
+  }, [tareas]);
 
   useEffect(() => {
-    localStorage.setItem("asunts", JSON.stringify(asunts));
-  }, [asunts]);
+    localStorage.setItem("asuntos", JSON.stringify(asuntos));
+  }, [asuntos]);
 
   const handleDateChange = (selectedDate) => {
     setDate(selectedDate);
   };
 
-  const addTask = () => {
-    const taskText = prompt("Escribe tu tarea:");
-    if (taskText) {
-      setTasks((prevTasks) => {
-        const newTasks = {
-          ...prevTasks,
-          [date.toDateString()]: [...(prevTasks[date.toDateString()] || []), taskText],
+  const agregarTarea = () => {
+    const tareaText = prompt("Escribe tu tarea:");
+    if (tareaText) {
+      enviarTareas((prevTareas) => {
+        const newTareas = {
+          ...prevTareas,
+          [date.toDateString()]: [...(prevTareas[date.toDateString()] || []), tareaText],
         };
-        localStorage.setItem("tasks", JSON.stringify(newTasks));
-        return newTasks;
+        localStorage.setItem("tareas", JSON.stringify(newTareas));
+        return newTareas;
       });
     }
   };
 
-  const addAsunt = () => {
-    const asuntText = prompt("Escribe el Asunto:");
-    if (asuntText) {
-      setAsunts((prevAsunts) => {
-        const newAsunts = {
-          ...prevAsunts,
-          [date.toDateString()]: [...(prevAsunts[date.toDateString()] || []), asuntText],
+  const agregarAsunto = () => {
+    const asuntoText = prompt("Escribe el Asunto:");
+    if (asuntoText) {
+      enviarAsunto((prevAsuntos) => {
+        const newAsuntos = {
+          ...prevAsuntos,
+          [date.toDateString()]: [...(prevAsuntos[date.toDateString()] || []), asuntoText],
         };
-        localStorage.setItem("asunts", JSON.stringify(newAsunts));
-        return newAsunts;
+        localStorage.setItem("asuntos", JSON.stringify(newAsuntos));
+        return newAsuntos;
       });
     }
   };
 
-  const removeTask = (taskToRemove) => {
-    setTasks((prevTasks) => {
-      const updatedTasks = prevTasks[date.toDateString()].filter((task) => task !== taskToRemove);
-      const newTasks = { ...prevTasks };
-      if (updatedTasks.length === 0) {
-        delete newTasks[date.toDateString()];
+  const eliminarTarea = (eliminarTareas) => {
+    enviarTareas((prevTareas) => {
+      const actualizarTareas = prevTareas[date.toDateString()].filter((tarea) => tarea !== eliminarTareas);
+      const newTareas = { ...prevTareas };  
+      if (actualizarTareas.length === 0) {
+        delete newTareas[date.toDateString()];
       } else {
-        newTasks[date.toDateString()] = updatedTasks;
+        newTareas[date.toDateString()] = actualizarTareas;
       }
-      localStorage.setItem("tasks", JSON.stringify(newTasks));
-      return newTasks;
+      localStorage.setItem("tasks", JSON.stringify(newTareas));
+      return newTareas;
     });
   };
  
-  const removeAsunt = (asuntToRemove) => {
-    setAsunts((prevAsunts) => {
-      const updatedAsunts = prevAsunts[date.toDateString()].filter((asunt) => asunt !== asuntToRemove);
-      const newAsunts = { ...prevAsunts };
-      if (updatedAsunts.length === 0) {
-        delete newAsunts[date.toDateString()];
+  const eliminarAsunto = (eliminarAsuntos) => {
+    enviarAsunto((prevAsuntos) => {
+      const actualizarAsuntos = prevAsuntos[date.toDateString()].filter((asunto) => asunto !== eliminarAsuntos);
+      const newAsuntos = { ...prevAsuntos };
+      if (actualizarAsuntos.length === 0) {
+        delete newAsuntos[date.toDateString()];
       } else {
-        newAsunts[date.toDateString()] = updatedAsunts;
+        newAsuntos[date.toDateString()] = actualizarAsuntos;
       }
-      localStorage.setItem("asunts", JSON.stringify(newAsunts));
-      return newAsunts;
+      localStorage.setItem("asunts", JSON.stringify(newAsuntos));
+      return newAsuntos;
     });
   };
 
   const tileClassName = ({ date }) => {
-    return tasks[date.toDateString()] ? "has-task" : "";
+    return tareas[date.toDateString()] ? "has-task" : "";
   };
 
   return (
@@ -102,16 +102,16 @@ function TaskCalendar() {
         </div>
 
         
-        <div className="tasks">
+        <div className="tareas">
           <h3>Tareas para: {date.toLocaleDateString("es-ES", )}</h3>
           
           <div>
-            {tasks[date.toDateString()]?.length ? (
+            {tareas[date.toDateString()]?.length ? (
               <ul>
-                {tasks[date.toDateString()].map((task, index) => (
+                {tareas[date.toDateString()].map((tarea, index) => (
                   <li key={index}>
-                    {task}
-                    <button className="delete-btn" onClick={() => removeTask(task)}>Eliminar</button>
+                    {tarea}
+                    <button className="delete-btn" onClick={() => eliminarTarea(tarea)}>Eliminar</button>
                   </li>
                 ))}
               </ul>
@@ -122,12 +122,12 @@ function TaskCalendar() {
 
           <h3>Asuntos:</h3>
           <div>
-            {asunts[date.toDateString()]?.length ? (
+            {asuntos[date.toDateString()]?.length ? (
               <ul>
-                {asunts[date.toDateString()].map((asunt, index) => (
+                {asuntos[date.toDateString()].map((asunto, index) => (
                   <li key={index}>
-                    {asunt}
-                    <button className="delete-btn" onClick={() => removeAsunt(asunt)}>Eliminar</button>
+                    {asunto}
+                    <button className="delete-btn" onClick={() => eliminarAsunto(asunto)}>Eliminar</button>
                   </li>
                 ))}
               </ul>
@@ -136,8 +136,8 @@ function TaskCalendar() {
             )}
           </div>
 
-          <button className="add-btn" onClick={addTask}>➕ Agregar Tarea</button>
-          <button className="add-btn" onClick={addAsunt}>📄 Agregar Asunto</button>
+          <button className="add-btn" onClick={agregarTarea}>➕ Agregar Tarea</button>
+          <button className="add-btn" onClick={agregarAsunto}>📄 Agregar Asunto</button>
         </div>
       </div>
     </div>
