@@ -1,0 +1,47 @@
+/* Mis CSS**/
+.padre{
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.tamaño-imagen{
+    width: 100%;
+    height: 700px;
+    margin-top: 50px;
+}
+
+.estilo-profile{
+    border-radius: 50%;
+    height: 120px;
+    width: 120px;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+.cajatexto{
+    background-color: #cccccc40;
+    border-color: slategray;
+    border-radius: 30px;
+    width: 100%;
+    padding: 15px;
+    border-width: 0px;
+    margin-bottom: 20px;
+}
+
+.cajatexto:focus{
+    outline: 1px solid #7866C9;
+    box-shadow: 0 0 10px #7866C9;
+}
+
+.btnform{
+    background-color: #8c68ce;
+    border-radius: 30px;
+    width: 100%;
+    padding: 15px;
+    border-width: 0px;
+    margin-bottom: 20px;
+    color: white;
+}
