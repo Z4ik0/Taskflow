@@ -38,7 +38,7 @@ function App() {
 export default App;
 
 
-/*Mover sus cosas
+/*Mover sus cosas, comente lo que tenian cuando descargue los cambios, si quieren comentan lo mio y descomentan lo suyo
 
 
 function App() {
@@ -68,10 +68,7 @@ function App() {
         <Welcome onStart={handleStart} />
       ) : (
         <>
-          <h1 className="text-center my-4">Taskflow</h1>
-          <div>
-            {usuario ? <Home correoUsusario = {usuario.email}/> : <Login/>}
-          </div>
+            <h1 className="text-center my-4">Taskflow</h1>
           <TaskCalendar />
         </>
       )}
