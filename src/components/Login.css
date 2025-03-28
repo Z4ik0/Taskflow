@@ -3,6 +3,7 @@
     display: flex;
     align-items: center;
     height: 100%;
+    
 }
 
 .tamaño-imagen{
@@ -29,6 +30,7 @@
     padding: 15px;
     border-width: 0px;
     margin-bottom: 20px;
+    color: black    ;
 }
 
 .cajatexto:focus{
@@ -44,4 +46,21 @@
     border-width: 0px;
     margin-bottom: 20px;
     color: white;
+}
+
+.texto {
+    font-size: 20px;
+    color: slategray;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 20px;
+}
+
+.btnswitch{
+    background-color: darkblue;
+    border-radius: 30px;
+    padding: 8px;
+    border-width: 0px;
+    color: white;
+    font-size: 16px;
+
 }

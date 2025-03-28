@@ -9,6 +9,28 @@ const auth = getAuth(appFirebase)
 
 const Login = () => {
         const [registrando, setRegistrando] = useState(false)
+        const funcAutenticacion = async (e) => {
+            e.preventDefault();
+            const correo = e.target.email.value;
+            const contraseña = e.target.password.value;
+            
+            if (registrando) {
+                try {
+                    await createUserWithEmailAndPassword(auth, correo, contraseña)
+                } catch (error) {
+                    alert("Asegurese que la contraseña tiene al menos 8 caracteres")
+                }
+            }
+            else {
+                try {
+                    await signInWithEmailAndPassword(auth, correo, contraseña)
+                } catch (error) {
+                    alert("El correo o la contraseña son incorrectos")
+                }
+                
+            }
+
+        }
     return (
     <div className="container">
         <div className="row">
@@ -17,12 +39,12 @@ const Login = () => {
                 <div className="padre">
                     <div className="card card-body shadow-lg">
                         <img src={Profile} alt="" className="estilo-profile" />
-                        <form >
-                            <input type="text" placeholder="Ingresar Email" className="cajatexto" />
-                            <input type="password" placeholder="Ingresar Contraseña" className="cajatexto" />
-                            
+                        <form onSubmit={funcAutenticacion} >
+                            <input type="text" placeholder="Ingresar Email" className="cajatexto" id="email"/>
+                            <input type="password" placeholder="Ingresar Contraseña" className="cajatexto" id="password" />
+                            <button className="btnform">{registrando ? "Registrate" : "Inicia Sesion"}</button>
                         </form> 
-                        
+                        <h4 className="texto">{registrando ? "Si Ya Tienes Cuenta" : "No Tienes Cuenta"}<button className="btnswitch" onClick={()=>setRegistrando(!registrando)}>{registrando ? "Inicia Sesion" : "Registrate"}</button></h4> 
                     </div>
                 </div>
             </div>
