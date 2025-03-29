@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
-import "./calendar.css";
+import "./styles/calendar.css";
 
 function TaskCalendar() {
   const [date, setDate] = useState(new Date());

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Imagen from '../assets/img/imagen.jpeg';
 import Profile from '../assets/img/profile.jpeg';
-import "../components/Login.css";
+import "./styles/login.css";
 
 import appFirebase from "../credenciales.js";
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
