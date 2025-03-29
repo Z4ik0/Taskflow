@@ -2,7 +2,7 @@ import React from "react";
 import appFirebase from "../credenciales.js";
 import { getAuth, signOut } from "firebase/auth";
 import { useState } from "react";
-import TaskCalendar from "../calendar";
+import TaskCalendar from "./calendar.jsx";
 import Welcome from "./Welcome";
 const auth = getAuth(appFirebase);
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import TaskCalendar from "./calendar";
+import TaskCalendar from "./components/calendar.jsx";
 import Welcome from "./components/Welcome";
 
 //Importar los modulos de Firebase
