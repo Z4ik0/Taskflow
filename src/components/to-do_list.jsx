@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 const ToDoList = () => {
   const [inputValue, setInputValue] = useState("");
   const [tasks, setTasks] = useState([]);
+  const [pending, setPending] = useState(0);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -23,12 +24,14 @@ const ToDoList = () => {
     } else {
       setTasks([...tasks, inputValue]);
       setInputValue("");
+      setPending(pending + 1);
     }
   };
 
   const handleDeleteTask = (index) => {
     const newTasks = tasks.filter((_, i) => i !== index);
     setTasks(newTasks);
+    setPending(pending - 1);
   };
 
   const handleDeleteAllTasks = () => {
@@ -44,6 +47,7 @@ const ToDoList = () => {
       }).then((result) => {
         if (result.isConfirmed) {
           setTasks([]);
+          setPending(0);
           Swal.fire({
               title: "Eliminado",
               text: "Todas las tareas han sido eliminadas",
@@ -88,7 +92,7 @@ const ToDoList = () => {
         )}
       </ul>
       <div className="todo_footer">
-        <span>You have pending tasks</span>
+        <span>You have {pending} pending tasks</span>
         <button onClick={handleDeleteAllTasks}>Borrar todo</button>
       </div>
     </div>
