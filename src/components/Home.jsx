@@ -4,13 +4,35 @@ import { getAuth, signOut } from "firebase/auth";
 import ToDoList from "./to-do_list.jsx";
 import TaskCalendar from "./calendar.jsx";
 
-const auth = getAuth(appFirebase);
+import NotaForm from "./Notesform.jsx";
+import Notas from "./Notes.jsx";
 
+const auth = getAuth(appFirebase);
 const Home = ({ correoUsusario }) => {
+
+  // ! codigo necesario para el manejo del compoonente notas atte Irving Cruz
+  const [notas, setNotas] = useState([]);
+
+  const agregarNota = (nota) => {
+    setNotas([...notas, nota]);
+  };
+
+  const eliminarNota = (id) => {
+    setNotas(notas.filter((nota) => nota.id !== id));
+  };
+  // ! Fin del codigo para el componente notas atte Irving Cruz
+
   const [activeComponent, setActiveComponent] = useState("summary");
 
   const renderComponent = () => {
     switch (activeComponent) {
+      case "notes":
+        return (
+          <div>
+            <NotaForm agregarNota={agregarNota} />
+            <Notas notas={notas} eliminarNota={eliminarNota} />
+          </div>
+        );
       case "calendar":
         return <TaskCalendar />;
       case "todo":
@@ -59,6 +81,12 @@ const Home = ({ correoUsusario }) => {
           onClick={() => setActiveComponent("todo")}
         >
           Lista de Tareas
+        </button>
+        <button
+          className={`nav-link ${activeComponent === "notes" ? "active" : ""}`}
+          onClick={() => setActiveComponent("notes")}
+        >
+          Notas
         </button>
       </nav>
 

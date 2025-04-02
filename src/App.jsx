@@ -36,7 +36,6 @@ function App() {
         <Welcome onStart={handleStart} />
       ) : (
         <>
-          <h1 className="text-center my-4">Taskflow</h1>
           {usuario ? <Home correoUsusario = {usuario.email}/> : <Login/>}
         </>
       )}
