@@ -3,17 +3,19 @@ import appFirebase from "../credenciales.js";
 import { getAuth, signOut } from "firebase/auth";
 import ToDoList from "./to-do_list.jsx";
 import TaskCalendar from "./calendar.jsx";
-
 import NotaForm from "./Notesform.jsx";
 import Notas from "./Notes.jsx";
 
+// Importar el archivo CSS
+import "./Home.css";
+
 const auth = getAuth(appFirebase);
+
 const Home = ({ correoUsusario }) => {
-  
-  // ! logica de notas
   const [notas, setNotas] = useState([]);
   const [categorias, setCategorias] = useState([]);
-  const [notaSeleccionada, setNotaSeleccionada] = useState(null); // Estado para la nota seleccionada
+  const [notaSeleccionada, setNotaSeleccionada] = useState(null);
+  const [activeComponent, setActiveComponent] = useState("summary");
 
   useEffect(() => {
     const notasGuardadas = JSON.parse(localStorage.getItem("notas")) || [];
@@ -51,10 +53,6 @@ const Home = ({ correoUsusario }) => {
   const cerrarNota = () => {
     setNotaSeleccionada(null);
   };
-
-  // ! FIN logica de notas
-
-  const [activeComponent, setActiveComponent] = useState("summary");
 
   const renderComponent = () => {
     switch (activeComponent) {
@@ -111,12 +109,10 @@ const Home = ({ correoUsusario }) => {
       default:
         return (
           <div className="text-center p-4">
-            <h2>Bienvenido a Taskflow</h2>
-            <p>
-              Taskflow es una herramienta diseñada para ayudarte a organizar tus
-              tareas diarias y planificar eventos importantes. Puedes gestionar
-              tus listas de tareas pendientes y utilizar un calendario
-              interactivo para establecer fechas límite.
+            <h2 className="fw-bold">Bienvenido a Taskflow</h2>
+            <p className="lead">
+              Taskflow es una herramienta diseñada para ayudarte a organizar tus tareas diarias y planificar eventos importantes. 
+              Puedes gestionar tus listas de tareas pendientes y utilizar un calendario interactivo para establecer fechas límite.
             </p>
           </div>
         );
@@ -125,47 +121,82 @@ const Home = ({ correoUsusario }) => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>Taskflow</h1>
-        <button className="btn btn-danger" onClick={() => signOut(auth)}>
-          Cerrar sesión
-        </button>
-      </div>
-
-      {/* Menú de navegación */}
-      <nav className="nav nav-pills mb-4">
-        <button
-          className={`nav-link ${
-            activeComponent === "summary" ? "active" : ""
-          }`}
-          onClick={() => setActiveComponent("summary")}
-        >
-          Resumen
-        </button>
-        <button
-          className={`nav-link ${
-            activeComponent === "calendar" ? "active" : ""
-          }`}
-          onClick={() => setActiveComponent("calendar")}
-        >
-          Calendario
-        </button>
-        <button
-          className={`nav-link ${activeComponent === "todo" ? "active" : ""}`}
-          onClick={() => setActiveComponent("todo")}
-        >
-          Lista de Tareas
-        </button>
-        <button
-          className={`nav-link ${activeComponent === "notes" ? "active" : ""}`}
-          onClick={() => setActiveComponent("notes")}
-        >
-          Notas
-        </button>
+      {/* Barra de navegación fija */}
+      <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div className="container-fluid">
+          <a className="navbar-brand fw-bold" href="#">
+            Taskflow
+          </a>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav me-auto">
+              <li className="nav-item">
+                <button
+                  className={`nav-link btn ${
+                    activeComponent === "summary" ? "active" : ""
+                  }`}
+                  onClick={() => setActiveComponent("summary")}
+                >
+                  Resumen
+                </button>
+              </li>
+              <li className="nav-item">
+                <button
+                  className={`nav-link btn ${
+                    activeComponent === "calendar" ? "active" : ""
+                  }`}
+                  onClick={() => setActiveComponent("calendar")}
+                >
+                  Calendario
+                </button>
+              </li>
+              <li className="nav-item">
+                <button
+                  className={`nav-link btn ${
+                    activeComponent === "todo" ? "active" : ""
+                  }`}
+                  onClick={() => setActiveComponent("todo")}
+                >
+                  Lista de Tareas
+                </button>
+              </li>
+              <li className="nav-item">
+                <button
+                  className={`nav-link btn ${
+                    activeComponent === "notes" ? "active" : ""
+                  }`}
+                  onClick={() => setActiveComponent("notes")}
+                >
+                  Notas
+                </button>
+              </li>
+            </ul>
+            <button
+              className="btn btn-danger"
+              onClick={() => signOut(auth)}
+            >
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
       </nav>
 
-      {/* Renderizar el componente activo */}
-      <div>{renderComponent()}</div>
+      {/* Contenido principal */}
+      <div className="container mt-5 pt-5">
+        <div className="card shadow-sm">
+          <div className="card-body">{renderComponent()}</div>
+        </div>
+      </div>
     </div>
   );
 };

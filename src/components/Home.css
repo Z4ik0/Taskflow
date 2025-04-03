@@ -1,0 +1,48 @@
+/* Estilo general */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* Barra de navegación fija */
+.navbar {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Botones del menú */
+.nav-link {
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.nav-link.active {
+  background-color: #0056b3;
+  color: white;
+}
+
+.nav-link:hover {
+  background-color: #004085;
+}
+
+/* Contenido principal */
+.card {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+/* Detalle de notas */
+.nota-detalle {
+  text-align: center;
+}
+
+.nota-detalle-imagen {
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+}
