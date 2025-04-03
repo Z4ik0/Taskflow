@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Welcome from "./components/Welcome";
+import Welcome from "./components/Welcome.jsx";
 
 //Importar los modulos de Firebase
 import appFirebase from '../src/credenciales.js'

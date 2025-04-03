@@ -108,11 +108,19 @@ const Home = ({ correoUsusario }) => {
         return <ToDoList />;
       default:
         return (
-          <div className="text-center p-4">
-            <h2 className="fw-bold">Bienvenido a Taskflow</h2>
-            <p className="lead">
-              Taskflow es una herramienta diseñada para ayudarte a organizar tus tareas diarias y planificar eventos importantes. 
-              Puedes gestionar tus listas de tareas pendientes y utilizar un calendario interactivo para establecer fechas límite.
+          <div className="summary-container text-center p-4">
+            <h2 className="summary-title">Bienvenido a Taskflow</h2>
+            <p className="summary-description">
+              Taskflow es tu herramienta definitiva para organizar tus tareas, gestionar tus listas por hacer y planificar eventos importantes. 
+              Con Taskflow, puedes:
+            </p>
+            <ul className="summary-list">
+              <li>Crear y gestionar listas de tareas pendientes.</li>
+              <li>Planificar fechas importantes en un calendario interactivo.</li>
+              <li>Tomar notas y categorizarlas según tus necesidades.</li>
+            </ul>
+            <p className="summary-footer">
+              ¡Comienza a organizar tu vida con Taskflow hoy mismo!
             </p>
           </div>
         );
@@ -122,10 +130,10 @@ const Home = ({ correoUsusario }) => {
   return (
     <div>
       {/* Barra de navegación fija */}
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+      <nav className="navbar navbar-expand-lg navbar-dark custom-navbar fixed-top">
         <div className="container-fluid">
           <a className="navbar-brand fw-bold" href="#">
-            Taskflow
+            <i className="bi bi-kanban"></i> Taskflow
           </a>
           <button
             className="navbar-toggler"
