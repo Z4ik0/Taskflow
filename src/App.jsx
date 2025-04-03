@@ -47,22 +47,3 @@ function App() {
 
 
 export default App;
-
-
-/*Mover sus cosas, comente lo que tenian cuando descargue los cambios, si quieren comentan lo mio y descomentan lo suyo
-
-
-function App() {
-//Constante para validacion del ususario
-  const [usuario, setUsuario] = useState(null)
-  onAuthStateChanged(auth, (usuarioFirebase)=>{
-    if (usuarioFirebase){
-      setUsuario(usuarioFirebase)
-    }
-    else 
-    {
-      setUsuario(null)
-    }
-  })
-
-*/

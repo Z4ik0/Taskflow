@@ -16,6 +16,7 @@ const Home = ({ correoUsusario }) => {
   const [categorias, setCategorias] = useState([]);
   const [notaSeleccionada, setNotaSeleccionada] = useState(null);
   const [activeComponent, setActiveComponent] = useState("summary");
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("Todas"); // Nueva categoría seleccionada
 
   useEffect(() => {
     const notasGuardadas = JSON.parse(localStorage.getItem("notas")) || [];
@@ -53,6 +54,12 @@ const Home = ({ correoUsusario }) => {
   const cerrarNota = () => {
     setNotaSeleccionada(null);
   };
+
+  // Filtrar notas según la categoría seleccionada
+  const notasFiltradas =
+    categoriaSeleccionada === "Todas"
+      ? notas
+      : notas.filter((nota) => nota.categoria === categoriaSeleccionada);
 
   const renderComponent = () => {
     switch (activeComponent) {
@@ -93,8 +100,26 @@ const Home = ({ correoUsusario }) => {
                   categorias={categorias}
                   agregarCategoria={agregarCategoria}
                 />
+                <div className="filter-container mb-3">
+                  <label htmlFor="categoriaFiltro" className="form-label">
+                    Filtrar por categoría:
+                  </label>
+                  <select
+                    id="categoriaFiltro"
+                    className="form-select"
+                    value={categoriaSeleccionada}
+                    onChange={(e) => setCategoriaSeleccionada(e.target.value)}
+                  >
+                    <option value="Todas">Todas</option>
+                    {categorias.map((categoria, index) => (
+                      <option key={index} value={categoria}>
+                        {categoria}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <Notas
-                  notas={notas}
+                  notas={notasFiltradas}
                   seleccionarNota={seleccionarNota}
                   eliminarNota={eliminarNota}
                 />
@@ -111,7 +136,8 @@ const Home = ({ correoUsusario }) => {
           <div className="summary-container text-center p-4">
             <h2 className="summary-title">Bienvenido a Taskflow</h2>
             <p className="summary-description">
-              Taskflow es tu herramienta definitiva para organizar tus tareas, gestionar tus listas por hacer y planificar eventos importantes. 
+              Taskflow es tu herramienta definitiva para organizar tus tareas,
+              gestionar tus listas por hacer y planificar eventos importantes.
               Con Taskflow, puedes:
             </p>
             <ul className="summary-list">
@@ -189,10 +215,7 @@ const Home = ({ correoUsusario }) => {
                 </button>
               </li>
             </ul>
-            <button
-              className="btn btn-danger"
-              onClick={() => signOut(auth)}
-            >
+            <button className="btn btn-danger" onClick={() => signOut(auth)}>
               Cerrar sesión
             </button>
           </div>
@@ -200,8 +223,8 @@ const Home = ({ correoUsusario }) => {
       </nav>
 
       {/* Contenido principal */}
-      <div className="container mt-5 pt-5">
-        <div className="card shadow-sm">
+      <div className="Contenido">
+        <div className="card .tarjeta shadow-sm">
           <div className="card-body">{renderComponent()}</div>
         </div>
       </div>

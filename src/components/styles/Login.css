@@ -7,6 +7,9 @@
   
   /* Estilo general del body */
   body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-family: 'Arial', sans-serif;
     /* Ejemplo de fondo con imagen */
     background: url('/src/assets/img/fondo-nocturno.jpg') no-repeat center center fixed;

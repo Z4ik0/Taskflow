@@ -11,6 +11,9 @@ const Notas = ({ notas, seleccionarNota, eliminarNota }) => {
             <div key={nota.id} className="nota-card">
               <div className="nota-card-body">
                 <h5 className="nota-card-title">{nota.titulo}</h5>
+                <p className="nota-card-category">
+                  Categoría: <span>{nota.categoria || "Sin categoría"}</span>
+                </p>
                 <button
                   className="nota-card-view"
                   onClick={() => seleccionarNota(nota.id)}
