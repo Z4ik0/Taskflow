@@ -17,8 +17,9 @@ const Login = () => {
         e.preventDefault();
         const correo = e.target.email.value.trim();
         const contraseña = e.target.password.value.trim();
-
-        // Validar campos vacíos
+    
+        console.log("Modo registro:", registrando); // Debug
+    
         if (!correo || !contraseña) {
             Swal.fire({
                 icon: "warning",
@@ -27,9 +28,10 @@ const Login = () => {
             });
             return;
         }
-
+    
         try {
             if (registrando) {
+                // Confirmación para registro
                 const { isConfirmed } = await Swal.fire({
                     title: "Confirmar registro",
                     html: `
@@ -42,19 +44,26 @@ const Login = () => {
                     confirmButtonText: "Sí, registrar",
                     cancelButtonText: "Cancelar",
                 });
-            
+    
                 if (!isConfirmed) return;
-            
+    
                 await createUserWithEmailAndPassword(auth, correo, contraseña);
                 Swal.fire({
                     icon: "success",
                     title: "Registro exitoso",
                     text: "Usuario registrado exitosamente.",
                 });
+            } else {
+                console.log("Intentando iniciar sesión..."); // Debug
+                await signInWithEmailAndPassword(auth, correo, contraseña);
+                Swal.fire({
+                    icon: "success",
+                    title: "Inicio de sesión exitoso",
+                    text: "Bienvenido de nuevo.",
+                });
             }
-            
-        } 
-        catch (error) {
+        } catch (error) {
+            console.error(error); // Para ver el error en consola
             switch (error.code) {
                 case "auth/email-already-in-use":
                     Swal.fire({
@@ -100,6 +109,7 @@ const Login = () => {
             }
         }
     };
+    
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -151,7 +161,7 @@ const Login = () => {
                                     </span>
                                 </div>
 
-                                <button className="btnform">
+                                <button type="submit" className="btnform">
                                     {registrando ? "Registrate" : "Inicia Sesión"}
                                 </button>
                             </form>
