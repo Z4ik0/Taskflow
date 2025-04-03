@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import "./styles/calendar.css";
 
 function TaskCalendar() {
   const [date, setDate] = useState(new Date());
   const [tareas, enviarTareas] = useState({});
   const [asuntos, enviarAsunto] = useState({});
-  const [taskToNotify, setTaskToNotify] = useState(null); // Estado para almacenar la tarea o asunto seleccionada para notificación
+  const [viewMode, setViewMode] = useState("day");
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem("tareas")) || {};
-    const storedAsunts = JSON.parse(localStorage.getItem("asuntos")) || {};
+    const storedAsuntos = JSON.parse(localStorage.getItem("asuntos")) || {};
     enviarTareas(storedTasks);
-    enviarAsunto(storedAsunts);
+    enviarAsunto(storedAsuntos);
   }, []);
 
   useEffect(() => {
@@ -23,116 +25,49 @@ function TaskCalendar() {
     localStorage.setItem("asuntos", JSON.stringify(asuntos));
   }, [asuntos]);
 
-  useEffect(() => {
-    if (Notification.permission !== "granted") {
-      Notification.requestPermission();
-    }
-  }, []);
-
   const handleDateChange = (selectedDate) => {
     setDate(selectedDate);
   };
 
-  const showNotification = (title, body) => {
-    if (Notification.permission === "granted") {
-      new Notification(title, {
-        body: body,
-        icon: "https://cdn-icons-png.flaticon.com/512/190/190411.png",
-      });
-    } else {
-      console.log("Permiso de notificación no concedido.");
-    }
-  };
-
-  // Función que se ejecuta cuando el usuario hace clic en "Notificar"
-  const handleNotifyButtonClick = () => {
-    if (taskToNotify) {
-      const now = new Date().getTime();
-      const selectedDate = new Date(date); // Asegurarse de que la fecha seleccionada se ajuste correctamente
-      selectedDate.setHours(0, 0, 0, 0); // Establecer la hora de la tarea a medianoche
-
-      const TiempoTarea = selectedDate.getTime();
-      const delay = TiempoTarea - now - 60000; // 1 minuto antes
-
-      console.log(`Notificando: ${taskToNotify}`);
-      console.log(`Tiempo de la tarea/asunto: ${TiempoTarea}`);
-      console.log(`Delay de notificación: ${delay}`);
-
-      if (delay > 0) {
-        setTimeout(() => {
-          showNotification("⏳ Recordatorio", `¡Recuerda! Tienes pendiente: ${taskToNotify}`);
-        }, delay);
-      } else {
-        console.log("La tarea o asunto ya pasó, no se puede notificar.");
-      }
-    } else {
-      console.log("No hay tarea o asunto seleccionado para notificar.");
-    }
+  const addNotification = (message) => {
+    setNotifications((prev) => [...prev, message]);
+    alert(message); // Notificación inmediata
   };
 
   const agregarTarea = () => {
-    const tareaText = prompt("Escribe tu tarea:");
-    if (tareaText) {
-      enviarTareas((prevTareas) => {
-        const newTareas = {
-          ...prevTareas,
-          [date.toDateString()]: [...(prevTareas[date.toDateString()] || []), tareaText],
-        };
-        localStorage.setItem("tareas", JSON.stringify(newTareas));
-        return newTareas;
-      });
+    const nuevaTarea = prompt("Introduce la tarea:");
+    const limiteTarea = prompt("Introduce la fecha límite (yyyy-mm-dd):");
+    if (nuevaTarea && limiteTarea) {
+      const formattedDate = date.toDateString();
+      const updatedTareas = { ...tareas, [formattedDate]: [...(tareas[formattedDate] || []), nuevaTarea] };
+      enviarTareas(updatedTareas);
+
+      // Agregar notificación
+      addNotification(`Tarea: "${nuevaTarea}" debe completarse antes del ${limiteTarea}`);
     }
   };
 
   const agregarAsunto = () => {
-    const asuntoText = prompt("Escribe el Asunto:");
-    if (asuntoText) {
-      enviarAsunto((prevAsuntos) => {
-        const newAsuntos = {
-          ...prevAsuntos,
-          [date.toDateString()]: [...(prevAsuntos[date.toDateString()] || []), asuntoText],
-        };
-        localStorage.setItem("asuntos", JSON.stringify(newAsuntos));
-        return newAsuntos;
-      });
+    const nuevoAsunto = prompt("Introduce el asunto:");
+    const limiteAsunto = prompt("Introduce la fecha límite (yyyy-mm-dd):");
+    if (nuevoAsunto && limiteAsunto) {
+      const formattedDate = date.toDateString();
+      const updatedAsuntos = { ...asuntos, [formattedDate]: [...(asuntos[formattedDate] || []), nuevoAsunto] };
+      enviarAsunto(updatedAsuntos);
+
+      // Agregar notificación
+      addNotification(`Asunto: "${nuevoAsunto}" debe completarse antes del ${limiteAsunto}`);
     }
-  };
-
-  const eliminarTarea = (eliminarTareas) => {
-    enviarTareas((prevTareas) => {
-      const actualizarTareas = prevTareas[date.toDateString()].filter((tarea) => tarea !== eliminarTareas);
-      const newTareas = { ...prevTareas };
-      if (actualizarTareas.length === 0) {
-        delete newTareas[date.toDateString()];
-      } else {
-        newTareas[date.toDateString()] = actualizarTareas;
-      }
-      localStorage.setItem("tareas", JSON.stringify(newTareas));
-      return newTareas;
-    });
-  };
-
-  const eliminarAsunto = (eliminarAsuntos) => {
-    enviarAsunto((prevAsuntos) => {
-      const actualizarAsuntos = prevAsuntos[date.toDateString()].filter((asunto) => asunto !== eliminarAsuntos);
-      const newAsuntos = { ...prevAsuntos };
-      if (actualizarAsuntos.length === 0) {
-        delete newAsuntos[date.toDateString()];
-      } else {
-        newAsuntos[date.toDateString()] = actualizarAsuntos;
-      }
-      localStorage.setItem("asuntos", JSON.stringify(newAsuntos));
-      return newAsuntos;
-    });
-  };
-
-  const tileClassName = ({ date }) => {
-    return tareas[date.toDateString()] ? "has-task" : "";
   };
 
   return (
     <div className="calendar-container">
-      <h2>Calendario</h2>
+      <h2>Tu Calendario</h2>
+
+      <div className="view-toggle">
+        <button onClick={() => setViewMode("week")}>Por Semana</button>
+        <button onClick={() => setViewMode("month")}>Por Mes</button>
+      </div>
 
       <div className="calendar-and-tasks">
         <div className="calendar">
@@ -140,63 +75,26 @@ function TaskCalendar() {
             onChange={handleDateChange}
             value={date}
             locale="es-ES"
-            tileClassName={tileClassName}
           />
         </div>
 
-        <div className="tareas">
-          <h3>Tareas para: {date.toLocaleDateString("es-ES")}</h3>
-
-          <div>
-            {tareas[date.toDateString()]?.length ? (
-              <ul>
-                {tareas[date.toDateString()].map((tarea, index) => (
-                  <li key={index}>
-                    {tarea}
-                    <button 
-                      className="notify-btn" 
-                      onClick={() => setTaskToNotify(tarea)} // Establecer la tarea a notificar
-                    >
-                      🔔 Notificar
-                    </button>
-                    <button className="delete-btn" onClick={() => eliminarTarea(tarea)}>Eliminar</button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No hay tareas para este día.</p>
-            )}
-          </div>
-
-          <h3>Asuntos: {date.toLocaleDateString("es-ES")}</h3>
-          <div>
-            {asuntos[date.toDateString()]?.length ? (
-              <ul>
-                {asuntos[date.toDateString()].map((asunto, index) => (
-                  <li key={index}>
-                    {asunto}
-                    <button 
-                      className="notify-btn" 
-                      onClick={() => setTaskToNotify(asunto)} // Establecer el asunto a notificar
-                    >
-                      🔔 Notificar
-                    </button>
-                    <button className="delete-btn" onClick={() => eliminarAsunto(asunto)}>Eliminar</button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No hay asuntos para esta fecha.</p>
-            )}
-          </div>
-
-          <button className="add-btn" onClick={agregarTarea}>➕ Agregar Tarea</button>
-          <button className="add-btn" onClick={agregarAsunto}>📄 Agregar Asunto</button>
-
-          {/* Botón para disparar la notificación */}
-          <button className="notify-btn" onClick={handleNotifyButtonClick}>
-            Enviar Notificación
+        <div className="asuntos-tareas">
+          <h3>Asuntos de: {date.toLocaleDateString("es-ES")}</h3>
+          <button className="add-btn" onClick={agregarAsunto}>
+            ➕ Agregar Asunto
           </button>
+
+          <h3>Tareas de: {date.toLocaleDateString("es-ES")}</h3>
+          <button className="add-btn" onClick={agregarTarea}>
+            ➕ Agregar Tarea
+          </button>
+
+          <h3>Notificaciones</h3>
+          <ul>
+            {notifications.map((notif, index) => (
+              <li key={index}>{notif}</li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
