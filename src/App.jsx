@@ -7,9 +7,8 @@ import {getAuth, onAuthStateChanged} from 'firebase/auth';
 const auth = getAuth(appFirebase)
 
 //importar componentes
-import Login from '../src/components/login.jsx'
-import Home from '../src/components/home.jsx'
-
+import Login from './components/Login.jsx';
+import Home from './components/Home.jsx';
 
 function App() {
 
