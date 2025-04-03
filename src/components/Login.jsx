@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Imagen from '../assets/img/imagen.jpeg';
+import Imagen from '../assets/img/abeja.gif';
 import Profile from '../assets/img/profile.jpeg';
 import "./styles/login.css";
 
@@ -9,6 +9,7 @@ const auth = getAuth(appFirebase);
 
 const Login = () => {
     const [registrando, setRegistrando] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const funcAutenticacion = async (e) => {
         e.preventDefault();
@@ -23,16 +24,13 @@ const Login = () => {
 
         try {
             if (registrando) {
-                // Registro de usuario
                 await createUserWithEmailAndPassword(auth, correo, contraseña);
                 alert("Usuario registrado exitosamente.");
             } else {
-                // Inicio de sesión
                 await signInWithEmailAndPassword(auth, correo, contraseña);
                 alert("Inicio de sesión exitoso.");
             }
         } catch (error) {
-            // Manejo de errores
             switch (error.code) {
                 case "auth/email-already-in-use":
                     alert("El correo ya está en uso. Intente con otro.");
@@ -55,6 +53,10 @@ const Login = () => {
         }
     };
 
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+
     return (
         <div className="container">
             <div className="row">
@@ -72,14 +74,35 @@ const Login = () => {
                                     name="email"
                                     aria-label="Correo electrónico"
                                 />
-                                <input
-                                    type="password"
-                                    placeholder="Ingresar Contraseña"
-                                    className="cajatexto"
-                                    id="password"
-                                    name="password"
-                                    aria-label="Contraseña"
-                                />
+
+                                {/* Contenedor relativo para el input y el ícono */}
+                                <div className="password-input">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        placeholder="Ingresar Contraseña"
+                                        className="cajatexto"
+                                        id="password"
+                                        name="password"
+                                        aria-label="Contraseña"
+                                    />
+                                    {/* Ícono de ojo */}
+                                    <span className="icon-eye" onClick={toggleShowPassword}>
+                                        {showPassword ? (
+                                            // Ojo "abierto" (contraseña visible)
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" viewBox="0 0 16 16">
+                                                <path d="M13.359 11.238l1.385 1.386c.137-.202.254-.41.354-.63a7.027 7.027 0 0 0-9.638-9.64 7.032 7.032 0 0 0-.63.355l1.386 1.386a4.992 4.992 0 0 1 5.138 5.139zM8 3a5 5 0 0 1 5 5 4.98 4.98 0 0 1-.777 2.737l1.542 1.542A6.978 6.978 0 0 0 16 8a7 7 0 0 0-7-7c-1.23 0-2.39.287-3.42.802l1.542 1.542A4.98 4.98 0 0 1 8 3z"/>
+                                                <path d="M3.354 1.646a.5.5 0 0 1 .708 0l10 10a.5.5 0 0 1-.708.708l-10-10a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        ) : (
+                                            // Ojo "cerrado" (contraseña oculta)
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" viewBox="0 0 16 16">
+                                                <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM8 12c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+                                                <path d="M8 10.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+                                            </svg>
+                                        )}
+                                    </span>
+                                </div>
+
                                 <button className="btnform">
                                     {registrando ? "Registrate" : "Inicia Sesión"}
                                 </button>
@@ -96,7 +119,7 @@ const Login = () => {
                         </div>
                     </div>
                 </div>
-                {/* Columna más grande para imagen */}
+                {/* Columna más grande para imagen (GIF) */}
                 <div className="col-md-8">
                     <img src={Imagen} alt="Fondo" className="tamaño-imagen" />
                 </div>

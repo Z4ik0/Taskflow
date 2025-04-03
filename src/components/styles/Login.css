@@ -1,66 +1,149 @@
-/* Mis CSS**/
-.padre{
+/* Reinicio básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Estilo general del body */
+  body {
+    font-family: 'Arial', sans-serif;
+    /* Ejemplo de fondo con imagen */
+    background: url('/src/assets/img/fondo-nocturno.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+  }
+
+
+
+
+  /* Ajustes generales del container y row (si usas Bootstrap) */
+  .container {
+    padding: 2rem;
+  }
+  
+  /* Centrado vertical del contenido en la col-md-4 */
+  .padre {
     display: flex;
     align-items: center;
+    justify-content: center;
     height: 100%;
-    
-}
-
-.tamaño-imagen{
-    width: 100%;
-    height: 700px;
-    margin-top: 50px;
-}
-
-.estilo-profile{
+  }
+  
+  /* Card con efecto glassmorphism */
+  .card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    text-align: center;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #ffffff;
+  }
+  
+  /* Imagen de perfil */
+  .estilo-profile {
     border-radius: 50%;
     height: 120px;
     width: 120px;
-    margin: 0 auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-
-.cajatexto{
-    background-color: #cccccc40;
-    border-color: slategray;
-    border-radius: 30px;
+    margin: 0 auto 20px auto;
+    object-fit: cover;
+    border: 2px solid #fff;
+  }
+  
+  /* Inputs */
+  .cajatexto {
     width: 100%;
     padding: 15px;
-    border-width: 0px;
     margin-bottom: 20px;
-    color: black    ;
-}
-
-.cajatexto:focus{
-    outline: 1px solid #7866C9;
-    box-shadow: 0 0 10px #7866C9;
-}
-
-.btnform{
-    background-color: #8c68ce;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
     border-radius: 30px;
-    width: 100%;
-    padding: 15px;
-    border-width: 0px;
-    margin-bottom: 20px;
-    color: white;
-}
-
-.texto {
-    font-size: 20px;
-    color: slategray;
-    font-family: Arial, Helvetica, sans-serif;
-    margin-top: 20px;
-}
-
-.btnswitch{
-    background-color: darkblue;
-    border-radius: 30px;
-    padding: 8px;
-    border-width: 0px;
-    color: white;
+    color: #fff;
     font-size: 16px;
-
-}
+  }
+  
+  .cajatexto::placeholder {
+    color: #f1f1f1;
+  }
+  
+  .cajatexto:focus {
+    outline: 1px solid #9b7ad6;
+    box-shadow: 0 0 10px #7866C9;
+  }
+  
+  /* Botón principal */
+  .btnform {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 30px;
+    background-color: #8c68ce;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btnform:hover {
+    background-color: #a076f0;
+  }
+  
+  /* Texto adicional */
+  .texto {
+    font-size: 18px;
+    color: #ffffff;
+    margin-top: 10px;
+  }
+  
+  /* Botón para cambiar entre login y registro */
+  .btnswitch {
+    margin-left: 10px;
+    background-color: #342f92;
+    border-radius: 30px;
+    padding: 8px 14px;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btnswitch:hover {
+    background-color: #4740c4;
+  }
+  
+  /* Imagen (GIF) a la derecha */
+  .tamaño-imagen {
+    width: 90%;
+    max-height: 600px;
+    object-fit: contain;
+    opacity: 0.85;
+    border-radius: 10px;
+    margin: 20px auto;
+    display: block;
+  }
+  
+  /* Contenedor relativo para el input y el ícono */
+  .password-input {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  /* Ajuste del input para dejar espacio al ícono */
+  .password-input .cajatexto {
+    padding-right: 45px; /* Aumenta si el ícono es más grande */
+  }
+  
+  /* Ícono de mostrar/ocultar contraseña */
+  .icon-eye {
+    position: absolute;
+    top: 40%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  
