@@ -141,7 +141,7 @@
   /* Ícono de mostrar/ocultar contraseña */
   .icon-eye {
     position: absolute;
-    top: 40%;
+    top: 37.5%;
     right: 15px;
     transform: translateY(-50%);
     cursor: pointer;

@@ -3,6 +3,8 @@ import Imagen from '../assets/img/abeja.gif';
 import Profile from '../assets/img/profile.jpeg';
 import "./styles/login.css";
 
+import Swal from "sweetalert2";
+
 import appFirebase from "../credenciales.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 const auth = getAuth(appFirebase);
@@ -18,37 +20,83 @@ const Login = () => {
 
         // Validar campos vacíos
         if (!correo || !contraseña) {
-            alert("Por favor, complete todos los campos.");
+            Swal.fire({
+                icon: "warning",
+                title: "Campos incompletos",
+                text: "Por favor, complete todos los campos.",
+            });
             return;
         }
 
         try {
             if (registrando) {
+                const { isConfirmed } = await Swal.fire({
+                    title: "Confirmar registro",
+                    html: `
+                        <p><strong>Email:</strong> ${correo}</p>
+                        <p><strong>Contraseña:</strong> ${contraseña}</p>
+                        <p>¿Desea proceder con estos datos?</p>
+                    `,
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonText: "Sí, registrar",
+                    cancelButtonText: "Cancelar",
+                });
+            
+                if (!isConfirmed) return;
+            
                 await createUserWithEmailAndPassword(auth, correo, contraseña);
-                alert("Usuario registrado exitosamente.");
-            } else {
-                await signInWithEmailAndPassword(auth, correo, contraseña);
-                alert("Inicio de sesión exitoso.");
+                Swal.fire({
+                    icon: "success",
+                    title: "Registro exitoso",
+                    text: "Usuario registrado exitosamente.",
+                });
             }
-        } catch (error) {
+            
+        } 
+        catch (error) {
             switch (error.code) {
                 case "auth/email-already-in-use":
-                    alert("El correo ya está en uso. Intente con otro.");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Correo en uso",
+                        text: "El correo ya está en uso. Intente con otro.",
+                    });
                     break;
                 case "auth/invalid-email":
-                    alert("El correo no tiene un formato válido.");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Correo inválido",
+                        text: "El correo no tiene un formato válido.",
+                    });
                     break;
                 case "auth/weak-password":
-                    alert("La contraseña debe tener al menos 6 caracteres.");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Contraseña débil",
+                        text: "La contraseña debe tener al menos 6 caracteres.",
+                    });
                     break;
                 case "auth/user-not-found":
-                    alert("Usuario no encontrado. Verifique el correo.");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Usuario no encontrado",
+                        text: "Verifique el correo ingresado.",
+                    });
                     break;
                 case "auth/wrong-password":
-                    alert("Contraseña incorrecta. Intente nuevamente.");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Contraseña incorrecta",
+                        text: "Contraseña incorrecta. Intente nuevamente.",
+                    });
                     break;
                 default:
-                    alert("Ocurrió un error. Intente nuevamente.");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Ocurrió un error. Intente nuevamente.",
+                    });
             }
         }
     };
@@ -61,13 +109,13 @@ const Login = () => {
         <div className="container">
             <div className="row">
                 {/* Formulario de login */}
-                <div className="col-md-4">
+                <div className="col-md-6">
                     <div className="padre">
                         <div className="card card-body shadow-lg">
                             <img src={Profile} alt="Perfil" className="estilo-profile" />
                             <form onSubmit={funcAutenticacion}>
                                 <input
-                                    type="email"
+                                    type="text "
                                     placeholder="Ingresar Email"
                                     className="cajatexto"
                                     id="email"
@@ -120,7 +168,7 @@ const Login = () => {
                     </div>
                 </div>
                 {/* Columna más grande para imagen (GIF) */}
-                <div className="col-md-8">
+                <div className="col-md-6">
                     <img src={Imagen} alt="Fondo" className="tamaño-imagen" />
                 </div>
             </div>
