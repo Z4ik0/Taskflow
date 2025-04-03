@@ -1,16 +1,15 @@
-
-
 .calendar-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
   padding: 20px;
-  background-color: #fff;
+  background-color: #ffe9e9;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   max-width: 1000px; 
   width: 100%;
+  color: #000300;
   text-align: center;
 }
 
@@ -19,6 +18,7 @@
   justify-content: space-between;
   gap: 40px;
   flex-wrap: wrap;
+  color: #000300;
   width: 100%;
 }
 
@@ -28,7 +28,7 @@
   color: #000300;
   padding: 20px;
   background-color: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid #0059ff;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
@@ -46,8 +46,8 @@
 }
 
 button {                 /* cambiar por clases de boton */
-  background-color: #b8daff;
-  color: black;
+  background-color: #0022ff;
+  color: rgb(0, 0, 0);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -67,6 +67,7 @@ button:hover {
   background-color: #00ff00;
   color: #000300;
   font-weight: bold;
+  background-color: #000300;
 }
 
 .react-calendar__tile.has-task:hover {
@@ -167,7 +168,7 @@ ul li button:hover {
 .add-btn {
   padding: 5px 15px;
   margin-top: 10px;
-  background-color: #007bff;
+  background-color: #002aff;
   color: white;
   border: none;
   border-radius: 5px;
@@ -175,12 +176,12 @@ ul li button:hover {
 }
 
 .add-btn:hover {
-  background-color: #0056b3;
+  background-color: #4200b3;
 }
 
 /* Asegurarnos de que los botones de navegación (Ver por día, semana, mes) sean accesibles */
 .react-calendar__navigation button {
-  background-color: #007bff;
+  background-color: #0004ff;
   color: white;
   border-radius: 5px;
   padding: 8px 16px;
@@ -189,5 +190,6 @@ ul li button:hover {
 }
 
 .react-calendar__navigation button:hover {
-  background-color: #0056b3;
+  background-color: #00a6ff;
+  color: #000300;
 }
